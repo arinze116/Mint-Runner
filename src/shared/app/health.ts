@@ -17,7 +17,7 @@ export interface HealthSnapshot {
 }
 
 export function buildHealthJson(snapshot: HealthSnapshot): Record<string, unknown> {
-    if (snapshot.service === 'mint-runner') {
+    if (snapshot.role === 'copy') {
         return {
             ok: snapshot.ok,
             service: snapshot.service,
@@ -33,7 +33,7 @@ export function buildHealthJson(snapshot: HealthSnapshot): Record<string, unknow
         };
     }
 
-    if (snapshot.service === 'mint-runner') {
+    if (snapshot.role === 'mint') {
         return {
             ok: snapshot.ok,
             service: snapshot.service,
