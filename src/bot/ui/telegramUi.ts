@@ -103,6 +103,7 @@ export function statusMenuText(params: {
     bribe: string;
     maxMint: string;
     walletLine: string;
+    whaleLine: string;
     ethSpent: string;
     tradesOk: number;
     tradesFail: number;
@@ -126,7 +127,7 @@ export function statusMenuText(params: {
             uiRow('Gas', `${p.overdrive}  ·  Sim ${p.sim}`) +
             '\n' +
             uiRow('Limits', `Bribe ${p.bribe}  ·  Cap ${p.maxMint}`) +
-            `\n\n<b>Fleet</b>\n${p.walletLine}\n\n` +
+            `\n\n<b>Fleet</b>\n${p.walletLine}${p.whaleLine}\n` +
             `<b>Session</b>  ${p.ethSpent} ETH spent  ·  ✓${p.tradesOk}  ✗${p.tradesFail}`,
     });
 }
@@ -305,6 +306,7 @@ export function mintCommanderKeyboard(isAdmin = false) {
 }
 
 export function emergencyMenuText(params: {
+    autoMint: boolean;
     trackerRunning: boolean;
     scheduledCount: number;
     blockMintCount: number;

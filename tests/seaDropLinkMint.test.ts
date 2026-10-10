@@ -20,6 +20,11 @@ assert(isSeaDropPublicSelector(SEADROP_MINT_PUBLIC));
 assert.strictEqual(SEADROP_MINT_PUBLIC, '0x161ac21f');
 console.log('  ✅ Current mintPublic selector is 0x161ac21f');
 
+if (process.env.RUN_LIVE_RPC_TESTS !== 'true') {
+    console.log('Skipping live-chain SeaDrop checks; set RUN_LIVE_RPC_TESTS=true to run them.');
+    process.exit(0);
+}
+
 console.log('Test 2: on-chain SeaDrop public drop for 0x9711...');
 const provider = new JsonRpcProvider('https://ethereum.publicnode.com', 1, { staticNetwork: true });
 

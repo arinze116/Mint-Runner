@@ -8,7 +8,7 @@ import { getGuideContent, getGuideKeyboard, parseGuideSection } from '../src/bot
 console.log('Test 1: all sections under Telegram limit...');
 {
     for (const section of ['overview', 'mint', 'whales', 'wallets', 'engine', 'alerts', 'admin'] as const) {
-        const text = getGuideContent(section, { isAdmin: section === 'admin', version: '3.3.2' });
+        const text = getGuideContent(section, { isAdmin: section === 'admin' });
         assert(text.length < 4000, `${section} too long: ${text.length}`);
     }
     console.log('  ✅ section lengths ok');
@@ -23,7 +23,7 @@ console.log('Test 2: parseGuideSection...');
 
 console.log('Test 3: admin section hidden content for non-admin...');
 {
-    const text = getGuideContent('admin', { isAdmin: false, version: '1' });
+    const text = getGuideContent('admin', { isAdmin: false });
     assert(text.includes('only available'));
     console.log('  ✅ admin gate text');
 }

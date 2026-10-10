@@ -38,7 +38,7 @@ withEnv(
     { BOT_ROLE: 'copy', COPY_BOT_ENABLED: 'true', MINT_BOT_ENABLED: 'false' },
     () => {
         assert.equal(resolveBotRole(), 'copy');
-        assert.equal(getServiceName('copy'), 'copy-mint-bot');
+        assert.equal(getServiceName('copy'), 'mint-runner');
         assert.equal(runsCopyMintServices('copy'), true);
         assert.equal(runsMintCommandServices('copy'), false);
     }
@@ -48,7 +48,7 @@ withEnv(
     { BOT_ROLE: 'mint', COPY_BOT_ENABLED: 'false', MINT_BOT_ENABLED: 'true' },
     () => {
         assert.equal(resolveBotRole(), 'mint');
-        assert.equal(getServiceName('mint'), 'mint-command-bot');
+        assert.equal(getServiceName('mint'), 'mint-runner');
         assert.equal(runsCopyMintServices('mint'), false);
         assert.equal(runsMintCommandServices('mint'), true);
     }
@@ -58,17 +58,17 @@ withEnv(
 const copyCommands = getTelegramCommandsForRole('copy');
 const mintCommands = getTelegramCommandsForRole('mint');
 
-assert.ok(copyCommands.some(c => c.command === 'track'));
-assert.ok(copyCommands.some(c => c.command === 'automint'));
+assert.ok(copyCommands.some(c => c.command === 'forcesim'));
+assert.ok(copyCommands.some(c => c.command === 'pause'));
 assert.ok(!copyCommands.some(c => c.command === 'blockmint'));
 assert.ok(!copyCommands.some(c => c.command === 'dropmint'));
 
 assert.ok(mintCommands.some(c => c.command === 'blockmint'));
 assert.ok(mintCommands.some(c => c.command === 'mint'));
-assert.ok(!mintCommands.some(c => c.command === 'track'));
+assert.ok(!mintCommands.some(c => c.command === 'forcesim'));
 
 assert.equal(isCommandAllowedForRole('blockmint', 'copy'), false);
-assert.equal(isCommandAllowedForRole('track', 'mint'), false);
+assert.equal(isCommandAllowedForRole('forcesim', 'mint'), false);
 assert.equal(isCommandAllowedForRole('start', 'copy'), true);
 assert.equal(isCommandAllowedForRole('start', 'mint'), true);
 
@@ -86,7 +86,7 @@ for (const name of copyNames) {
 // --- health JSON ---
 const copyHealth = buildHealthJson({
     ok: true,
-    service: 'copy-mint-bot',
+    service: 'mint-runner',
     version: 'test',
     uptime: 1,
     discord: 'ready',
@@ -96,13 +96,13 @@ const copyHealth = buildHealthJson({
     role: 'copy',
 });
 
-assert.equal(copyHealth.service, 'copy-mint-bot');
+assert.equal(copyHealth.service, 'mint-runner');
 assert.equal(copyHealth.walletTracker, 'running');
 assert.equal(copyHealth.commands, undefined);
 
 const mintHealth = buildHealthJson({
     ok: true,
-    service: 'mint-command-bot',
+    service: 'mint-runner',
     version: 'test',
     uptime: 1,
     discord: 'not_ready',
@@ -112,7 +112,7 @@ const mintHealth = buildHealthJson({
     role: 'mint',
 });
 
-assert.equal(mintHealth.service, 'mint-command-bot');
+assert.equal(mintHealth.service, 'mint-runner');
 assert.equal(mintHealth.commands, 'loaded');
 assert.equal(mintHealth.walletTracker, undefined);
 

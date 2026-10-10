@@ -1575,6 +1575,7 @@ function buildRoleHealthSnapshot(): HealthSnapshot {
     return {
         ok: true,
         service: SERVICE_NAME,
+        version: BOT_VERSION,
         uptime: Math.floor(process.uptime()),
         discord: telegramReady,
         walletTracker:
@@ -3704,7 +3705,7 @@ bot.command('debug_status', async (ctx) => {
 });
 
 async function sendCapacityMenu(ctx: any, isEdit = false): Promise<void> {
-    const status = buildCapacityStatus(tracker);
+    const status = buildCapacityStatus(tracker, BOT_VERSION);
     const text = capacityMenuText(status, state.autoMint);
     const keyboard = capacityMenuKeyboard(status, state.autoMint);
     const opts = {
@@ -4299,6 +4300,7 @@ async function sendEmergencyMenu(ctx: any, isEdit = true): Promise<void> {
     const scheduledCount = (state.scheduledMints || []).filter(s => !s.fired && !s.missed).length;
     const blockMintCount = (state.blockMintJobs || []).filter(j => !j.fired && !j.cancelled).length;
     const text = emergencyMenuText({
+        autoMint: state.autoMint,
         trackerRunning: !!tracker?.running,
         scheduledCount,
         blockMintCount,
