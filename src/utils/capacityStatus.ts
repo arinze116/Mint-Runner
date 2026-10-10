@@ -24,6 +24,7 @@ export interface CapacityLiveStats {
 }
 
 export interface CapacityStatus {
+    version: string;
     executionConcurrency: number;
     preflightConcurrency: number;
     simulationConcurrency: number;
@@ -44,7 +45,8 @@ export interface CapacityStatus {
 }
 
 export function buildCapacityStatus(
-    tracker: MintTracker | null
+    tracker: MintTracker | null,
+    version = 'unknown'
 ): CapacityStatus {
     const cfg = getRuntimeConfig();
     const stats = tracker?.getStats?.() || {
@@ -57,6 +59,7 @@ export function buildCapacityStatus(
     const trackerDbg = trackerDebugState.get();
 
     return {
+        version,
         executionConcurrency: cfg.executionConcurrency,
         preflightConcurrency: cfg.preflightConcurrency,
         simulationConcurrency: cfg.simulationConcurrency,
